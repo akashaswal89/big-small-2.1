@@ -62,7 +62,7 @@
       <tr>
         <th>Number</th>
         <th>Prediction</th>
-        <th>Accuracy</th>
+        
       </tr>
     </thead>
     <tbody></tbody>
@@ -70,43 +70,53 @@
 
 <script>
   function randomPredictBigOrSmall(inputNumber) {
-    const randomValue = Math.random();
-    const prediction = randomValue >= 0.5 ? 'big' : 'small';
+    const prediction = Math.random() >= 0.5 ? 'big' : 'small';
     const accuracy = prediction === 'big' ? 55.56 : 44.44;
-
     return {
       number: inputNumber,
-      prediction: prediction,
-      accuracy: accuracy
+      prediction,
+      accuracy
     };
   }
 
-  // Fixed list of numbers to display
-  const allowedNumbers = [
-    2, 3, 6, 7, 10, 12, 13, 16, 17, 20, 22, 23, 26, 27, 30, 32, 33, 36, 37, 40,
-    42, 43, 46, 47, 50, 52, 53, 56, 57, 60, 62, 63, 66, 67, 70, 72, 73, 76, 77,
-    80, 82, 83, 86, 87, 90, 92, 93, 96, 97, 100
+  // ✨ Original set of numbers
+  const baseNumbers = [
+    2, 3, 6, 7, 10, 12, 13, 16, 17, 20,
+    22, 23, 26, 27, 30, 32, 33, 36, 37, 40,
+    42, 43, 46, 47, 50, 52, 53, 56, 57, 60,
+    62, 63, 66, 67, 70, 72, 73, 76, 77, 80,
+    82, 83, 86, 87, 90, 92, 93, 96, 97, 100
   ];
 
-  const tableBody = document.querySelector("#resultTable tbody");
+  // ✅ Prompt for input range
+  const start = parseInt(prompt("Enter the starting number (min 1):"));
+  const end = parseInt(prompt("Enter the ending number (max 1000):"));
 
-  allowedNumbers.forEach(i => {
-    const result = randomPredictBigOrSmall(i);
-    const row = document.createElement("tr");
-    row.className = result.prediction;
+  if (isNaN(start) || isNaN(end) || start < 1 || end > 1000 || start > end) {
+    alert("Please enter a valid range between 1 and 1000.");
+  } else {
+    const tableBody = document.querySelector("#resultTable tbody");
 
-    row.innerHTML = `
-      <td>${result.number}</td>
-      <td>${result.prediction}</td>
-      <td>${result.accuracy}%</td>
-    `;
+    for (let i = 0; i <= 900; i += 100) {
+      baseNumbers.forEach(base => {
+        const num = base + i;
+        if (num >= start && num <= end) {
+          const result = randomPredictBigOrSmall(num);
+          const row = document.createElement("tr");
+          row.className = result.prediction;
 
-    tableBody.appendChild(row);
-  });
+          row.innerHTML = `
+            <td>${result.number}</td>
+            <td>${result.prediction}</td>
+            
+          `;
+
+          tableBody.appendChild(row);
+        }
+      });
+    }
+  }
 </script>
+
 </body>
 </html>
-
-
-
-
